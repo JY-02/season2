@@ -94,13 +94,51 @@ class DraftViewSet(viewsets.ModelViewSet):
                 raise ValueError
         except ValueError:
             return Response({'error' : 'invalid diff_Count. '
-                                       'must be an integer between 3 and 5.'}, status=400)
+                            'must be an integer between 3 and 5.'}, status=400)
 
         draft.diff=diff_count
         draft.save()
 
         return Response({'message' : "diff_Count updated successfully", 'diff' : diff_count})
 
+    @action(detail=False, methods=['post'], url_path='genre')
+    def genre(self, request):
+        nickname = request.data.get('nickname')
+        genre = request.data.get('genre')
+
+        if not nickname or not genre:
+            return Response({"error": "닉네임과 장르를 모두 제공해야 합니다."}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            member = Members.objects.get(nickname=nickname)
+        except Members.DoesNotExist:
+            return Response({"error": "회원을 찾을 수 없습니다."}, status=status.HTTP_404_NOT_FOUND)
+
+        Draft.objects.filter(user=member).update(genre=genre)
+
+        return Response({"message": "Draft 장르가 성공적으로 업데이트되었습니다."}, status=status.HTTP_200_OK)
+
+    @action(detail=False, methods=['post'])
+    def writer(self, request):
+        nickname = request.data.get('nickname')
+        writer_name = request.data.get('writer')
+
+        # 닉네임으로 멤버 조회
+        member = get_object_or_404(Members, nickname=nickname)
+
+        # Draft 인스턴스 생성
+        draft_data = {
+            'user': member.id,
+            'writer': writer_name,
+            'drawSty': request.data.get('drawSty', 0),
+            'diff': request.data.get('diff', 0)
+        }
+        draft_serializer = DraftSerializer(data=draft_data)
+        if draft_serializer.is_valid():
+            draft_serializer.save()
+            return Response(draft_serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            return Response(draft_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 #temporary subject maker. need to erase later.
 def generate_subject():
@@ -122,7 +160,7 @@ class IntroViewSet(viewsets.ModelViewSet):
             intro = Intro.objects.create(subject=subject, draft=draft)
             created_subjects.append({'id': intro.id, 'subject': intro.subject})
         return Response({'message': 'Intro created successfully',
-                         'intros': created_subjects},
+                        'intros': created_subjects},
                         status=status.HTTP_201_CREATED)
 
     @action(detail=False, methods=['post'])
@@ -137,7 +175,7 @@ class IntroViewSet(viewsets.ModelViewSet):
             intro = Intro.objects.create(subject=subject, draft=draft)
             created_subjects.append({'id': intro.id, 'subject': intro.subject})
         return Response({'message' : "subject recreated successfully",
-                         'intros': created_subjects},
+                    'intros': created_subjects},
                         status=status.HTTP_201_CREATED)
 
     @action(detail=False, methods=['post'])
@@ -148,10 +186,10 @@ class IntroViewSet(viewsets.ModelViewSet):
         subject_id=request.data.get('subject_id')
         subject=get_object_or_404(Intro, id=subject_id)
         return Response({'message' : "subject selected successfully",
-                         'selected_subject':
-                             {'id':subject.id,
-                              'subject':subject.subject,
-                              'draft_id':draft.id}})
+                        'selected_subject':
+                            {'id':subject.id,
+                            'subject':subject.subject,
+                            'draft_id':draft.id}})
 class DraftPageViewSet(viewsets.ModelViewSet):
     queryset = DraftPage.objects.all()
     serializer_class = DraftPageSerializer
