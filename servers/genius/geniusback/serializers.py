@@ -1,7 +1,12 @@
+from typing import Type
+
+from django.db.models import Model
 from rest_framework import serializers
 
 
-def createSerializer(model_class, name_suffix="Serializer"):
+def createSerializer(
+    model_class: Type[Model], name_suffix="Serializer"
+) -> Type[serializers.ModelSerializer]:
     class Meta:
         model = model_class
         fields = "__all__"

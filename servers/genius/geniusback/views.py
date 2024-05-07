@@ -1,7 +1,10 @@
+import random
+
 from django.contrib.auth import authenticate, login
 from django.shortcuts import get_object_or_404
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
+from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -35,12 +38,16 @@ MyFlowerSerializer = createSerializer(MyFlower)
 
 # temporary auth for API test
 class LoginViewforAuth(APIView):
-    def post(self, request, *args, **kwargs):
+    def post(self, request: Request, *args, **kwargs):
+        if not isinstance(request.data, dict):
+            return Response({"error": "No data received"}, status=status.HTTP_400_BAD_REQUEST)
+
         username = (request.data.get("username"),)
         password = (request.data.get("password"),)
         user = authenticate(request, username=username, password=password)
         if user is not None:
-            login(request, user)
+            http_request = request._request
+            login(http_request, user)
             return Response({"message": "logged in successfully"}, status=status.HTTP_200_OK)
         else:
             return Response({"error": "invalid info"}, status=status.HTTP_401_UNAUTHORIZED)
@@ -51,7 +58,7 @@ class MembersViewSet(viewsets.ModelViewSet):
     serializer_class = MembersSerializer
 
     @action(detail=False, methods=["get"])
-    def user_nickname(self, request):
+    def user_nickname(self, request: Request):
         # calling user nickname
         user = request.user
         return Response({"user_nickname": user.nickname})
@@ -65,7 +72,10 @@ class MembersViewSet(viewsets.ModelViewSet):
 
 # buying seeds
 class PurchaseSeeds(APIView):
-    def post(self, request, *args, **kwargs):
+    def post(self, request: Request, *args, **kwargs):
+        if not isinstance(request.data, dict):
+            return Response({"error": "No data received"}, status=status.HTTP_400_BAD_REQUEST)
+
         user = request.user
         seeds_for_purchase = request.data.get("seeds_for_purchase", 0)
 
@@ -84,7 +94,7 @@ class PurchaseSeeds(APIView):
 
 # counting amount of seeds
 class GetSeedsCount(APIView):
-    def get(self, request, *args, **kwargs):
+    def get(self, request: Request, *args, **kwargs):
         user = request.user
         return Response({"씨앗 개수": user.seedCnt})
 
@@ -104,7 +114,10 @@ class DraftViewSet(viewsets.ModelViewSet):
     serializer_class = DraftSerializer
 
     @action(methods=["post"], detail=True)
-    def choose_diff(self, request):
+    def choose_diff(self, request: Request):
+        if not isinstance(request.data, dict):
+            return Response({"error": "No data received"}, status=status.HTTP_400_BAD_REQUEST)
+
         draft = self.get_object()
 
         diff_count = request.data.get("diff_Count")
@@ -125,7 +138,10 @@ class DraftViewSet(viewsets.ModelViewSet):
         return Response({"message": "diff_Count updated successfully", "diff": diff_count})
 
     @action(detail=False, methods=["post"], url_path="genre")
-    def genre(self, request):
+    def genre(self, request: Request):
+        if not isinstance(request.data, dict):
+            return Response({"error": "No data received"}, status=status.HTTP_400_BAD_REQUEST)
+
         nickname = request.data.get("nickname")
         genre = request.data.get("genre")
 
@@ -149,7 +165,10 @@ class DraftViewSet(viewsets.ModelViewSet):
         )
 
     @action(detail=False, methods=["post"])
-    def writer(self, request):
+    def writer(self, request: Request):
+        if not isinstance(request.data, dict):
+            return Response({"error": "No data received"}, status=status.HTTP_400_BAD_REQUEST)
+
         nickname = request.data.get("nickname")
         writer_name = request.data.get("writer")
 
@@ -182,7 +201,10 @@ class IntroViewSet(viewsets.ModelViewSet):
     serializer_class = IntroSerializer
 
     @action(detail=False, methods=["post"])
-    def create_subjects(self, request):
+    def create_subjects(self, request: Request):
+        if not isinstance(request.data, dict):
+            return Response({"error": "No data received"}, status=status.HTTP_400_BAD_REQUEST)
+
         draft_id = request.data.get("draft_id")
         draft = get_object_or_404(Draft, pk=draft_id)
 
@@ -197,7 +219,10 @@ class IntroViewSet(viewsets.ModelViewSet):
         )
 
     @action(detail=False, methods=["post"])
-    def recreate_subjects(self, request):
+    def recreate_subjects(self, request: Request):
+        if not isinstance(request.data, dict):
+            return Response({"error": "No data received"}, status=status.HTTP_400_BAD_REQUEST)
+
         draft_id = request.data.get("draft_id")
         draft = get_object_or_404(Draft, pk=draft_id)
 
@@ -213,7 +238,10 @@ class IntroViewSet(viewsets.ModelViewSet):
         )
 
     @action(detail=False, methods=["post"])
-    def select_subject(self, request):
+    def select_subject(self, request: Request):
+        if not isinstance(request.data, dict):
+            return Response({"error": "No data received"}, status=status.HTTP_400_BAD_REQUEST)
+
         draft_id = request.data.get("draft_id")
         draft = get_object_or_404(Draft, pk=draft_id)
 
