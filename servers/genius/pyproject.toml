@@ -20,7 +20,7 @@ ruff = "^0.4.3"
 
 [tool.pyright]
 # https://microsoft.github.io/pyright/#/configuration?id=sample-pyprojecttoml-file
-include = ["src"]
+include = ["genius", "geniusback"]
 exclude = [
   "**/node_modules",
   "**/__pycache__",
