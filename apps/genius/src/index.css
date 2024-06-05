@@ -1,6 +1,6 @@
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
+  /* line-height: 1.5; */
   font-weight: 400;
 
   color-scheme: light dark;
@@ -24,15 +24,20 @@ a:hover {
 
 body {
   margin: 0;
-  display: flex;
-  place-items: center;
+  padding: 0;
   min-width: 320px;
   min-height: 100vh;
+  background-color: black;
+}
+
+p, h1 {
+  padding: 0;
+  margin: 0;
 }
 
 h1 {
   font-size: 3.2em;
-  line-height: 1.1;
+  /* line-height: 1.1; */
 }
 
 button {

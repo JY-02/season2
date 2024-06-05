@@ -1,0 +1,501 @@
+[33mcommit 4e1e6bbed4ac3dcb0b67f531ac62ddc23a6609d5[m[33m ([m[1;36mHEAD -> [m[1;32mAdd_modal/yunseo[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Merge: 92d7650 8fa3289
+Author: HYEJIN KIM <94445693+hyejin5914@users.noreply.github.com>
+Date:   Sat May 18 15:18:17 2024 +0900
+
+    Merge pull request #60 from yeni023/hyejin/CSSmodify
+    
+    제작부 상단바 크기 조절 (메인 상단바랑 크기 똑같이 맞춤)
+
+[33mcommit 8fa32896c3783f89a4a1e4b32f899f89402efcca[m
+Author: HYEJIN KIM <20_khj@naver.com>
+Date:   Sat May 18 15:12:31 2024 +0900
+
+    제작부 상단바 크기 조절 (메인 상단바랑 크기 똑같이 맞춤)
+
+[33mcommit c3d8c0e22aa11377d7babe0bf30d14e7b06b3891[m
+Author: HYEJIN KIM <20_khj@naver.com>
+Date:   Sat May 18 12:14:24 2024 +0900
+
+    불필요한 파일 삭제-BasicInfo
+
+[33mcommit 92d7650de3810714d118cb34ac6badae53017b87[m
+Merge: cbd8e10 8a0d6e6
+Author: yeni023 <106057648+yeni023@users.noreply.github.com>
+Date:   Thu May 16 19:47:37 2024 +0900
+
+    Merge pull request #59 from yeni023/yeeun/TopBar
+    
+    ⚡️ 0516 Add TopBar
+
+[33mcommit cbd8e1028fbaef0edf2470d697128211b461111b[m
+Merge: 8b59a6d 1c156ca
+Author: yeni023 <106057648+yeni023@users.noreply.github.com>
+Date:   Thu May 16 19:20:31 2024 +0900
+
+    Merge pull request #58 from yeni023/Add_modal/yunseo
+    
+    Add modal/yunseo
+
+[33mcommit 8a0d6e6fcae6ce8b04752e3007c3a04e51968b29[m
+Author: yeni023 <yeeun3011@naver.com>
+Date:   Thu May 16 19:19:14 2024 +0900
+
+    ⚡️ 0516 Add TopBar
+
+[33mcommit 1c156ca5040272a8db1284b804d77e8cbef5e4ca[m[33m ([m[1;31morigin/Add_modal/yunseo[m[33m)[m
+Author: yunseo <cj2174@naver.com>
+Date:   Tue May 7 16:03:28 2024 +0900
+
+    240507 Add modal file
+
+[33mcommit e291b6e5534c153ba14852bf35b2ebb39b806cc5[m[33m ([m[1;32mMainhome_scroll/yunseo[m[33m)[m
+Merge: 479a932 8b59a6d
+Author: yunseo <cj2174@naver.com>
+Date:   Sun May 5 16:29:15 2024 +0900
+
+    Merge branch 'main' of https://github.com/yeni023/Front-End into Mainhome_scroll/yunseo
+
+[33mcommit 8b59a6d2beff8f12c87e618de597f8d2b99836a3[m
+Merge: e0105ff a127019
+Author: HYEJIN KIM <94445693+hyejin5914@users.noreply.github.com>
+Date:   Wed May 1 23:42:57 2024 +0900
+
+    Merge pull request #57 from yeni023/hyejin/modify
+    
+    Hyejin/modify - 혜진 오류 수정 완료 - 뱃지 페이지 다시 코딩 완료
+
+[33mcommit a127019e0e2744bd62f0df896a335aa735de180b[m
+Author: HYEJIN KIM <20_khj@naver.com>
+Date:   Wed May 1 23:31:54 2024 +0900
+
+    혜진 오류 수정 중 - 뱃지 페이지 다시 코딩 - PlantMain.tsx파일 수정
+
+[33mcommit 0663833dcd83f3271636a1b9c1bb6769bea8cd0e[m
+Author: HYEJIN KIM <20_khj@naver.com>
+Date:   Wed May 1 23:31:35 2024 +0900
+
+    혜진 오류 수정 중 - 뱃지 페이지 다시 코딩 - BadgeModal.tsx파일 수정
+
+[33mcommit 2e4224a7cc309bf258050f20093a7dbd32904a0c[m
+Author: HYEJIN KIM <20_khj@naver.com>
+Date:   Wed May 1 23:31:16 2024 +0900
+
+    혜진 오류 수정 중 - 뱃지 페이지 다시 코딩 - Badge.tsx파일 수정
+
+[33mcommit 01b51e165e715af50f07d8ad5c8798c2eacb078b[m
+Author: HYEJIN KIM <20_khj@naver.com>
+Date:   Wed May 1 23:30:48 2024 +0900
+
+    혜진 오류 수정 중 - 뱃지 페이지 다시 코딩 - public에 뱃지 이미지 8개 추가
+
+[33mcommit e0105ff7950f05a5305c210934b46be249f2da07[m
+Merge: a221352 26b6b62
+Author: HYEJIN KIM <94445693+hyejin5914@users.noreply.github.com>
+Date:   Wed May 1 23:04:33 2024 +0900
+
+    Merge pull request #56 from yeni023/hyejin/modify
+    
+    Hyejin/modify - recharts설치 완료, images폴더 안에 MyForestFlower.png 파일 추가 완료
+
+[33mcommit 26b6b62dc08f0ae116213d1cea33685f23b532de[m
+Author: HYEJIN KIM <20_khj@naver.com>
+Date:   Wed May 1 23:00:57 2024 +0900
+
+    혜진 오류 수정 중 - images 폴더 안에 MyForestFlower.png 파일 추가
+
+[33mcommit 6e1412a97da6aa1972197c48ed2a8390aa3741a1[m
+Author: HYEJIN KIM <20_khj@naver.com>
+Date:   Wed May 1 22:58:37 2024 +0900
+
+    혜진 오류 수정 중 - recharts 설치 완료
+
+[33mcommit a2213528ae5c104e4b001e107f134cbda490a47c[m
+Merge: 4ea4b2a 3d25412
+Author: HYEJIN KIM <94445693+hyejin5914@users.noreply.github.com>
+Date:   Wed May 1 22:52:02 2024 +0900
+
+    Merge pull request #55 from yeni023/hyejin/modify
+    
+    Hyejin/modify
+
+[33mcommit 3d25412dd96d139e3aeb368bb01687ad5cda1c56[m
+Author: HYEJIN KIM <20_khj@naver.com>
+Date:   Wed May 1 22:46:06 2024 +0900
+
+    혜진 오류 수정 중 - pages폴더안에 Roading폴더 추가
+
+[33mcommit b93f6297deede5baa36ddb2e285833ca5af1fa8e[m
+Author: HYEJIN KIM <20_khj@naver.com>
+Date:   Wed May 1 22:45:20 2024 +0900
+
+    혜진 오류 수정 중 - MyPage폴더 안에 파일 2개추가,  1개수정
+
+[33mcommit a023ca3dde18c8500e3f375b120fde300396e7c2[m
+Author: HYEJIN KIM <20_khj@naver.com>
+Date:   Wed May 1 22:44:22 2024 +0900
+
+    혜진 오류 수정 중 - MyPagePlant 폴더 추가
+
+[33mcommit 46c652f24508ec7ecf57b9a96a40e12c47b3a094[m
+Author: HYEJIN KIM <20_khj@naver.com>
+Date:   Wed May 1 22:43:40 2024 +0900
+
+    혜진 오류 수정 중 - MyPageForest 폴더 추가
+
+[33mcommit c54df9651bb284a6d9013e8f36fcdd3c7d675d63[m
+Author: HYEJIN KIM <20_khj@naver.com>
+Date:   Wed May 1 22:42:37 2024 +0900
+
+    혜진 오류 수정 중 - App.tsx에 경로 추가
+
+[33mcommit b4bdf623f06a133525ae3525c5b71db16d6c5647[m
+Author: HYEJIN KIM <20_khj@naver.com>
+Date:   Wed May 1 22:41:59 2024 +0900
+
+    혜진 오류 수정 중 - public에 사진 추가
+
+[33mcommit 4ea4b2a19ad1432e881f895f62eb552b90dfd042[m
+Merge: 3bb1077 0fa2203
+Author: HYEJIN KIM <94445693+hyejin5914@users.noreply.github.com>
+Date:   Wed May 1 17:04:59 2024 +0900
+
+    Merge pull request #54 from yeni023/revert-53-MyPage/hyejin
+    
+    Revert "My page/hyejin"
+
+[33mcommit 0fa220376175b5ffc8e145bdcea0da54fc79f8db[m
+Author: HYEJIN KIM <94445693+hyejin5914@users.noreply.github.com>
+Date:   Wed May 1 16:49:06 2024 +0900
+
+    Revert "My page/hyejin"
+
+[33mcommit 3bb10774cf7bd40234ef1f993ebaf107b01ca098[m
+Merge: c92b916 26cf18f
+Author: HYEJIN KIM <94445693+hyejin5914@users.noreply.github.com>
+Date:   Wed May 1 15:44:16 2024 +0900
+
+    Merge pull request #53 from yeni023/MyPage/hyejin
+    
+    My page/hyejin
+
+[33mcommit 26cf18f933f49bc0d366d810cfa37ee2cbe3311c[m
+Merge: cc732ff c92b916
+Author: HYEJIN KIM <94445693+hyejin5914@users.noreply.github.com>
+Date:   Wed May 1 14:59:46 2024 +0900
+
+    Merge branch 'main' into MyPage/hyejin
+
+[33mcommit cc732ff5009368c08c7922d21d697c8ad4d289e3[m
+Merge: a2c0b93 c33ab6e
+Author: HYEJIN KIM <20_khj@naver.com>
+Date:   Wed May 1 14:50:43 2024 +0900
+
+    Merge branch 'MyPage/hyejin' of https://github.com/yeni023/Front-End into MyPage/hyejin
+
+[33mcommit a2c0b934f590f2bf19e76415cd8e667d574bcc0f[m
+Author: HYEJIN KIM <20_khj@naver.com>
+Date:   Wed May 1 14:49:10 2024 +0900
+
+    마이페이지 구현 완료
+
+[33mcommit c92b916670ed4b9272bd6610e583d34111067c7d[m
+Merge: 1b0b3d9 dd6c476
+Author: yeni023 <106057648+yeni023@users.noreply.github.com>
+Date:   Wed May 1 14:00:00 2024 +0900
+
+    Merge pull request #52 from yeni023/yeeun/update3
+    
+    ✨ 0501 Update Navbar
+
+[33mcommit dd6c47667be6c5061aecbb6f097c7a3e2f435bcc[m
+Author: yeni023 <yeeun3011@naver.com>
+Date:   Wed May 1 13:49:00 2024 +0900
+
+    ✨ 0501 Update Navbar
+
+[33mcommit 1b0b3d94fb9aabda110fba736f7083f241a9144e[m
+Merge: 3fddb0a d64bafa
+Author: yeni023 <106057648+yeni023@users.noreply.github.com>
+Date:   Tue Apr 30 18:10:11 2024 +0900
+
+    Merge pull request #50 from yeni023/Mainhome_scroll/yunseo
+    
+    Mainhome scroll/yunseo
+
+[33mcommit 3fddb0a99e89edbce7c9cbcf1adfa96d193d9f6c[m
+Merge: ffbb3e8 5f738d6
+Author: yeni023 <106057648+yeni023@users.noreply.github.com>
+Date:   Tue Apr 30 01:38:56 2024 +0900
+
+    Merge pull request #51 from yeni023/yeeun/update2
+    
+    0430 Update files
+
+[33mcommit 5f738d680881eb61caa6e73c9d1de08fee2a31d7[m
+Author: yeni023 <yeeun3011@naver.com>
+Date:   Tue Apr 30 01:35:09 2024 +0900
+
+    💄 change IMG
+
+[33mcommit 43d330bb0ab48bceef776315713b6e8eaac9c959[m
+Author: yeni023 <yeeun3011@naver.com>
+Date:   Tue Apr 30 01:34:48 2024 +0900
+
+    ✨ 0430 update2
+
+[33mcommit 479a9320ca48d653346ef193e017fc2950f3eea9[m
+Merge: 2fb5035 ffbb3e8
+Author: yunseo <cj2174@naver.com>
+Date:   Mon Apr 29 21:24:48 2024 +0900
+
+    Merge branch 'main' of https://github.com/yeni023/Front-End into Mainhome_scroll/yunseo
+
+[33mcommit d64bafa11ec700381d7b4411b2497ad213dc3be5[m
+Merge: 2fb5035 ffbb3e8
+Author: cj2174 <134395531+cj2174@users.noreply.github.com>
+Date:   Mon Apr 29 21:18:52 2024 +0900
+
+    Merge branch 'main' into Mainhome_scroll/yunseo
+
+[33mcommit 2fb5035411faac04f1ecfdbc5ecc8c5260607a6d[m[33m ([m[1;31morigin/Mainhome_scroll/yunseo[m[33m)[m
+Author: yunseo <cj2174@naver.com>
+Date:   Mon Apr 29 21:09:59 2024 +0900
+
+    240429 Mainhome scroll
+
+[33mcommit ffbb3e86d94b933a700cf22c77890b112e924241[m
+Merge: 0051403 9412870
+Author: yeni023 <106057648+yeni023@users.noreply.github.com>
+Date:   Mon Apr 29 21:08:33 2024 +0900
+
+    Merge pull request #49 from yeni023/yeeun/update
+    
+    0429 Update Make Book Pages
+
+[33mcommit 941287095592b4d26c47a5424a688c46c64df9ae[m
+Author: yeni023 <yeeun3011@naver.com>
+Date:   Mon Apr 29 20:05:24 2024 +0900
+
+    💄 Update - MakeBook Images
+
+[33mcommit 12d183f8cf06d168b0b28376c2e33170eed1341d[m
+Author: yeni023 <yeeun3011@naver.com>
+Date:   Mon Apr 29 20:05:04 2024 +0900
+
+    ✨ Update - MakeBook
+
+[33mcommit 005140320427706292553da2479652b28ca3c8da[m
+Merge: fdf7951 bdbf660
+Author: yeni023 <106057648+yeni023@users.noreply.github.com>
+Date:   Mon Apr 29 17:36:53 2024 +0900
+
+    Merge pull request #47 from yeni023/Search_002/yunseo
+    
+    Search 002/yunseo
+
+[33mcommit cbc1b5166ef9ad39f235843a2343e95cedf42df8[m[33m ([m[1;31morigin/Navbar/yunseo[m[33m, [m[1;32mNavbar/yunseo[m[33m)[m
+Author: yunseo <cj2174@naver.com>
+Date:   Mon Apr 29 14:17:52 2024 +0900
+
+    240429 Navbar
+
+[33mcommit 5dcaa9fb3c075f1f713b3899835b6bfecd4939dd[m[33m ([m[1;32mSearch_002/yunseo[m[33m)[m
+Merge: bdbf660 fdf7951
+Author: yunseo <cj2174@naver.com>
+Date:   Mon Apr 29 14:06:11 2024 +0900
+
+    Merge branch 'main' into Search_002/yunseo
+
+[33mcommit bdbf660db3130c494331d46916b295501b8500ae[m[33m ([m[1;31morigin/Search_02/yunseo[m[33m, [m[1;31morigin/Search_002/yunseo[m[33m, [m[1;31morigin/Search02/yunseo[m[33m, [m[1;31morigin/Search/yunseo[m[33m, [m[1;32mSearch_02/yunseo[m[33m, [m[1;32mSearch02/yunseo[m[33m, [m[1;32mSearch/yunseo[m[33m, [m[1;32mChar_Tutorial002/yunseo[m[33m)[m
+Author: yunseo <cj2174@naver.com>
+Date:   Sun Apr 28 23:55:01 2024 +0900
+
+    20240428 Search file add
+
+[33mcommit fdf795102e4ef0eca2c695b428d5d874302a27db[m[33m ([m[1;32mmain[m[33m)[m
+Merge: e9b02c3 ab9c70a
+Author: yeni023 <106057648+yeni023@users.noreply.github.com>
+Date:   Sun Apr 28 23:50:25 2024 +0900
+
+    Merge pull request #46 from yeni023/yeeun/OtherPage2
+
+[33mcommit ab9c70a463d5d7f03079eb3ecf351f101769c39c[m
+Author: yeni023 <yeeun3011@naver.com>
+Date:   Sun Apr 28 23:46:39 2024 +0900
+
+    💄 0428 OtherUser Images
+
+[33mcommit 6d099139d938294709c6a81ffbf14ff56324c0be[m
+Author: yeni023 <yeeun3011@naver.com>
+Date:   Sun Apr 28 23:46:20 2024 +0900
+
+    ✨ 0428 OtherUser Page
+
+[33mcommit 0b78099691c4b6eff125afc65660913289200487[m[33m ([m[1;32mAdd_service/yunseo[m[33m)[m
+Merge: 9e49416 3e7ae1f
+Author: yunseo <cj2174@naver.com>
+Date:   Sun Apr 28 20:17:02 2024 +0900
+
+    Merge branch 'yeeun/OtherPage' of https://github.com/yeni023/Front-End into Add_service/yunseo
+
+[33mcommit e9b02c385d70c5b72b09083c61aeeadb94d48ce4[m
+Merge: f83d033 3e7ae1f
+Author: yeni023 <106057648+yeni023@users.noreply.github.com>
+Date:   Sun Apr 28 18:42:51 2024 +0900
+
+    Merge pull request #45 from yeni023/yeeun/OtherPage
+    
+    💄 Other User Profile Page
+
+[33mcommit c33ab6eb3588b842f2ca134474e2d0b2ec03ad97[m
+Author: HYEJIN KIM <20_khj@naver.com>
+Date:   Sat Apr 27 01:59:00 2024 +0900
+
+    react-three-fiber라이브러리 설치
+
+[33mcommit 4979d8e73b0046fa47b722eaf86bbf3076d745a5[m
+Author: HYEJIN KIM <20_khj@naver.com>
+Date:   Sat Apr 27 01:26:12 2024 +0900
+
+    나의 숲 만들기 위한 three.js 설치
+
+[33mcommit e12d9516dcce529a6a202a11c17ded3c608558ab[m
+Author: HYEJIN KIM <20_khj@naver.com>
+Date:   Sat Apr 27 00:57:38 2024 +0900
+
+    컴포넌트 폴더 이름 변경
+
+[33mcommit 016f98c348e3b56469fd627a4b8e9cb09281d816[m
+Author: HYEJIN KIM <20_khj@naver.com>
+Date:   Sat Apr 27 00:39:41 2024 +0900
+
+    나의 식물 페이지 전반적인 기능 구현 완료
+
+[33mcommit ca2a696e306f20751d53b197f7633b72fdfdd727[m
+Author: HYEJIN KIM <20_khj@naver.com>
+Date:   Sat Apr 27 00:39:10 2024 +0900
+
+    뱃지 이미지 추가
+
+[33mcommit 3e7ae1f8267629ae4dafd7407d9f9541f8471c9e[m[33m ([m[1;31morigin/yeeun/OtherPage[m[33m)[m
+Author: yeni023 <yeeun3011@naver.com>
+Date:   Thu Apr 25 23:57:38 2024 +0900
+
+    💄 OtherUser_Image
+
+[33mcommit 4c4f1ba9f07c143897ab7af51080d55af525db4f[m
+Author: yeni023 <yeeun3011@naver.com>
+Date:   Thu Apr 25 23:52:31 2024 +0900
+
+    💄 Other User Profile Page
+
+[33mcommit f83d03390a243ceb3bb10ab8e793d74a3a1afa25[m
+Merge: 4cbe5ca 8530d01
+Author: yeni023 <106057648+yeni023@users.noreply.github.com>
+Date:   Thu Apr 25 22:02:09 2024 +0900
+
+    Merge pull request #44 from yeni023/yeeun/Mypage4
+    
+    💄 remove border
+
+[33mcommit 8530d01767449353612120492c90dd5198108285[m
+Author: yeni023 <yeeun3011@naver.com>
+Date:   Thu Apr 25 21:59:19 2024 +0900
+
+    💄 remove border
+
+[33mcommit d0820412749d1df3b3a8104910159f112d6a837c[m
+Author: HYEJIN KIM <20_khj@naver.com>
+Date:   Thu Apr 25 01:23:40 2024 +0900
+
+    나의 식물 페이지 구현 시작
+
+[33mcommit 9e494161c2abc57326d89e58b00c1cd5a8742f99[m
+Merge: 64e5ec8 9dd1349
+Author: yunseo <cj2174@naver.com>
+Date:   Wed Apr 17 12:01:35 2024 +0900
+
+    Merge branch 'yeeun/Mypage4' of https://github.com/yeni023/Front-End into Add_service/yunseo
+
+[33mcommit 4cbe5cabef4af5b65da5c647674f99e2257c2167[m
+Merge: 64e5ec8 9dd1349
+Author: yeni023 <106057648+yeni023@users.noreply.github.com>
+Date:   Wed Apr 17 12:00:05 2024 +0900
+
+    Merge pull request #43 from yeni023/yeeun/Mypage4
+    
+    💄 0417 Develop MyPageForest
+
+[33mcommit 9dd13495614c095162961ca454130df0cb01ebf9[m[33m ([m[1;31morigin/yeeun/Mypage4[m[33m)[m
+Author: yeni023 <yeeun3011@naver.com>
+Date:   Wed Apr 17 11:58:09 2024 +0900
+
+    💄 0417 Develop MyPageForest
+
+[33mcommit 64e5ec8ca69176e67fdf4e09487dd5122eb6961b[m
+Merge: 569349b 0d5a0d2
+Author: cj2174 <134395531+cj2174@users.noreply.github.com>
+Date:   Wed Apr 17 11:40:56 2024 +0900
+
+    Merge pull request #42 from yeni023/yeeun/Mypage4
+    
+    Yeeun/mypage4
+
+[33mcommit 0d5a0d2caa78590b2b18408591a7ea58f2ddefcf[m
+Author: yeni023 <yeeun3011@naver.com>
+Date:   Tue Apr 16 11:39:12 2024 +0900
+
+    0416 app.tsx
+
+[33mcommit 2035abdc2b1537f0d72dcd8e5c9354198012481d[m
+Author: yeni023 <yeeun3011@naver.com>
+Date:   Tue Apr 16 11:34:02 2024 +0900
+
+    💄
+
+[33mcommit 569349baf4a391d53f040d909170d789ab9107b9[m
+Merge: e9e165f 48cc610
+Author: yeni023 <106057648+yeni023@users.noreply.github.com>
+Date:   Tue Apr 16 09:37:52 2024 +0900
+
+    Merge pull request #41 from yeni023/yeeun/Mypage3
+    
+    🍱 Update MyPage - Images
+
+[33mcommit 5a0bc0c156127128b3b676fa23bd08760e1a52de[m
+Merge: 48cc610 e9e165f
+Author: yeni023 <yeeun3011@naver.com>
+Date:   Tue Apr 16 09:19:55 2024 +0900
+
+    Merge branch 'main' into yeeun/Mypage4
+
+[33mcommit 48cc610352bfe9b9d96ec2310a48201e4ab87668[m[33m ([m[1;31morigin/yeeun/Mypage3[m[33m)[m
+Author: yeni023 <yeeun3011@naver.com>
+Date:   Tue Apr 16 09:11:44 2024 +0900
+
+    🍱 Update MyPage - Images
+
+[33mcommit e9e165f3f03251afcafca7fe7399661faed6c38e[m
+Merge: 239dfd5 7522385
+Author: yeni023 <106057648+yeni023@users.noreply.github.com>
+Date:   Tue Apr 16 01:58:10 2024 +0900
+
+    Merge pull request #40 from yeni023/yeeun/Mypage3
+    
+    💄0416 Develop MyPage-Book
+
+[33mcommit 7522385f5a7ad31f5bafda8c3730b6ce8cf06c49[m
+Author: yeni023 <yeeun3011@naver.com>
+Date:   Tue Apr 16 01:55:28 2024 +0900
+
+    💄0416 Develop MyPage-Book
+
+[33mcommit 239dfd52f51bffdf4586c8fff96806494785e473[m
+Merge: 7423f1a 4ba86e4
+Author: yeni023 <106057648+yeni023@users.noreply.github.com>
+Date:   Mon Apr 15 14:40:37 2024 +0900
+
+    Merge pull request #39 from yeni023/Add_service/yunseo
+
+[33
