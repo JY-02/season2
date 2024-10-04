@@ -42,6 +42,7 @@ WORKDIR /app
 COPY manage.py ./manage.py
 COPY genius ./genius
 COPY geniusback ./geniusback
+RUN pip install django-cors-headers
 
 EXPOSE 8000
 

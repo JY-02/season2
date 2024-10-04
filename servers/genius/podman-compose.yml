@@ -8,6 +8,7 @@ services:
       MYSQL_DATABASE: 'mysqltest1'
       MYSQL_USER: 'JY'
       MYSQL_PASSWORD: 'tgyhuj3#'
+      MYSQL_ROOT_PASSWORD: 'tgyhuj3#'
     ports:
       - "3306:3306"
     healthcheck:
@@ -17,6 +18,8 @@ services:
       retries: 10
   web:
     build: .
+    env_file:
+      - ../../.env
     command: poetry run python manage.py runserver 0.0.0.0:8000
     volumes:
       - .:/app/src
