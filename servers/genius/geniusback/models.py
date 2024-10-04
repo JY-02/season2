@@ -12,7 +12,7 @@ class Members(models.Model):
     createCnt = models.IntegerField(default=0)
 
     class Meta:
-        db_table = 'member'
+        db_table = "member"
 
 
 class Books(models.Model):
@@ -26,7 +26,7 @@ class Books(models.Model):
     #lastPage = models.IntegerField()
 
     class Meta:
-        db_table = 'book'
+        db_table = "book"
 
 
 class MyLibrary(models.Model):
@@ -34,7 +34,7 @@ class MyLibrary(models.Model):
     user = models.ForeignKey(Members, on_delete=models.CASCADE)
 
     class Meta:
-        db_table = 'mylibrary'
+        db_table = "mylibrary"
 
 
 class Draft(models.Model):
@@ -45,7 +45,8 @@ class Draft(models.Model):
     genre = models.CharField(max_length=30, null=True)
 
     class Meta:
-        db_table = 'draft'
+        db_table = "draft"
+
 
 
 class Intro(models.Model):
@@ -56,7 +57,7 @@ class Intro(models.Model):
     IntroContent = models.TextField(null=True)
 
     class Meta:
-        db_table = 'intro'
+        db_table = "intro"
 
 
 class DraftPage(models.Model):
@@ -67,7 +68,7 @@ class DraftPage(models.Model):
     pageImage = models.URLField(max_length=512, null=True)
 
     class Meta:
-        db_table = 'draftpage'
+        db_table = "draftpage"
 
 
 class FeedBack(models.Model):
@@ -77,7 +78,7 @@ class FeedBack(models.Model):
     feedContent = models.TextField()
 
     class Meta:
-        db_table = 'feedback'
+        db_table = "feedback"
 
 
 class Followers(models.Model):
@@ -86,7 +87,7 @@ class Followers(models.Model):
     follower = models.IntegerField(default=0) # 구독자 수
 
     class Meta:
-        db_table = 'follower'
+        db_table = "follower"
 
 
 class Flower(models.Model):
@@ -94,7 +95,7 @@ class Flower(models.Model):
 
 
     class Meta:
-        db_table = 'flower'
+        db_table = "flower"
 
 
 class MyForest(models.Model):
@@ -103,7 +104,7 @@ class MyForest(models.Model):
     #flower = models.ForeignKey(Flower, on_delete=models.CASCADE)
 
     class Meta:
-        db_table = 'myforest'
+        db_table = "myforest"
 
 
 class MyFlower(models.Model):
@@ -113,4 +114,4 @@ class MyFlower(models.Model):
     isActive = models.BooleanField()
 
     class Meta:
-        db_table = 'myflower'
+        db_table = "myflower"

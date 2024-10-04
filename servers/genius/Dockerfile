@@ -23,7 +23,7 @@ WORKDIR /app
 
 COPY pyproject.toml poetry.toml poetry.lock ./
 
-RUN pip install poetry==1.7.1
+RUN pip install poetry==1.8.2
 RUN --mount=type=cache,target=$POETRY_CACHE_DIR \
     poetry install --no-root --no-interaction --no-ansi
 
@@ -36,14 +36,13 @@ ENV VIRTUAL_ENV=/app/.venv \
 
 COPY --from=builder ${VIRTUAL_ENV} ${VIRTUAL_ENV}
 
+RUN apt-get update && apt-get install -y default-libmysqlclient-dev gcc
+
 WORKDIR /app
-COPY src ./src
 COPY manage.py ./manage.py
 COPY genius ./genius
 COPY geniusback ./geniusback
-RUN apt-get update && apt-get install -y default-libmysqlclient-dev gcc
 RUN pip install django-cors-headers
-
 
 EXPOSE 8000
 
