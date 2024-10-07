@@ -1,0 +1,14 @@
+{
+  "editor.insertSpaces": true,
+  "editor.tabSize": 4,
+  "python.languageServer": "Pylance",
+  "python.analysis.autoImportCompletions": true,
+  "python.analysis.typeCheckingMode": "basic",
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "charliermarsh.ruff",
+  "editor.codeActionsOnSave": {
+    "source.fixAll": "explicit",
+    "source.organizeImports": "explicit"
+  },
+  "git.openRepositoryInParentFolders": "always"
+}

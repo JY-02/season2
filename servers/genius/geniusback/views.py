@@ -1,8 +1,25 @@
-from django.shortcuts import render
+import random
+
+from django.contrib.auth import authenticate, login
+from django.shortcuts import get_object_or_404
+from rest_framework import status, viewsets
 from rest_framework.decorators import action
+from rest_framework.request import Request
 from rest_framework.response import Response
-from rest_framework import viewsets, status
 from rest_framework.views import APIView
+from .models import (
+    Books,
+    Draft,
+    DraftPage,
+    FeedBack,
+    Flower,
+    Followers,
+    Intro,
+    Members,
+    MyFlower,
+    MyForest,
+    MyLibrary,
+)
 from django.contrib.auth import authenticate, login
 from django.db.models import Max, F
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -30,31 +47,32 @@ MyFlowerSerializer = createSerializer(MyFlower)
 
 # temporary auth for API test
 class LoginViewforAuth(APIView):
-    def post(self, request, *args, **kwargs):
-        username = request.data.get('username')
-        password = request.data.get('password')
+    def post(self, request: Request, *args, **kwargs):
+        if not isinstance(request.data, dict):
+            return Response({"error": "No data received"}, status=status.HTTP_400_BAD_REQUEST)
+
+        username = (request.data.get("username"),)
+        password = (request.data.get("password"),)
         user = authenticate(request, username=username, password=password)
         if user is not None:
-            login(request, user)
-            refresh = RefreshToken.for_user(user)
-            return Response({
-                'refresh': str(refresh),
-                'access': str(refresh.access_token),
-                'message': 'logged in successfully'
-            }, status=status.HTTP_200_OK)
+            http_request = request._request
+            login(http_request, user)
+            return Response({"message": "logged in successfully"}, status=status.HTTP_200_OK)
         else:
-            return Response({'error': 'invalid info'}, status=status.HTTP_401_UNAUTHORIZED)
+            return Response({"error": "invalid info"}, status=status.HTTP_401_UNAUTHORIZED)
+
 
 
 class MembersViewSet(viewsets.ModelViewSet):
     queryset = Members.objects.all()
     serializer_class = MembersSerializer
 
-    @action(detail=False, methods=['get'])
-    def user_nickname(self, request):
+    @action(detail=False, methods=["get"])
+    def user_nickname(self, request: Request):
         # calling user nickname
         user = request.user
         return Response({"user_nickname": user.nickname})
+
 
     @action(detail=False, methods=['get'])
     def user_id(self, request):
@@ -65,28 +83,31 @@ class MembersViewSet(viewsets.ModelViewSet):
 
 # buying seeds
 class PurchaseSeeds(APIView):
-    def post(self, request, *args, **kwargs):
-        user = request.user
-        seeds_for_purchase = request.data.get('seeds_for_purchase', 0)
+    def post(self, request: Request, *args, **kwargs):
+        if not isinstance(request.data, dict):
+            return Response({"error": "No data received"}, status=status.HTTP_400_BAD_REQUEST)
 
+        user = request.user
+        seeds_for_purchase = request.data.get("seeds_for_purchase", 0)
         try:
             seeds_for_purchase = int(seeds_for_purchase)
         except ValueError:
-            return Response({'error': '올바르지 않은 씨앗 값입니다.'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"error": "올바르지 않은 씨앗 값입니다."}, status=400)
 
         if seeds_for_purchase < 0:
-            return Response({'error': '씨앗의 값이 0보다 작습니다.'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"error": "씨앗의 값이 0보다 작습니다."}, status=400)
 
         user.seedCnt += int(seeds_for_purchase)
         user.save()
-        return Response({'message': '씨앗 구매 성공!', '씨앗 개수': user.seedCnt})
+        return Response({"message": "씨앗 구매 성공!", "씨앗 개수": user.seedCnt})
+
 
 
 # counting amount of seeds
 class GetSeedsCount(APIView):
-    def get(self, request, *args, **kwargs):
+    def get(self, request: Request, *args, **kwargs):
         user = request.user
-        return Response({'씨앗 개수': user.seedCnt})
+        return Response({"씨앗 개수": user.seedCnt})
 
 
 class BooksViewSet(viewsets.ModelViewSet):
@@ -122,16 +143,21 @@ class MyLibraryViewSet(viewsets.ModelViewSet):
             except Members.DoesNotExist:
                 return Response({'error': 'Member not found'}, status=status.HTTP_404_NOT_FOUND)
 
-
 class DraftViewSet(viewsets.ModelViewSet):
     queryset = Draft.objects.all()
     serializer_class = DraftSerializer
-
     @action(detail=True, methods=['post'])
     def choose_diff(self, request, pk=None):
         draft = self.get_object()
 
-        diff_count = request.data.get('diff_Count')
+    @action(methods=["post"], detail=True)
+    def choose_diff(self, request: Request):
+        if not isinstance(request.data, dict):
+            return Response({"error": "No data received"}, status=status.HTTP_400_BAD_REQUEST)
+
+        draft = self.get_object()
+
+        diff_count = request.data.get("diff_Count")
         if diff_count is None:
             return Response({'error': 'diff_Count is required.'}, status=status.HTTP_400_BAD_REQUEST)
         try:
@@ -145,7 +171,7 @@ class DraftViewSet(viewsets.ModelViewSet):
         draft.diff = diff_count
         draft.save()
 
-        return Response({'message': "diff_Count updated successfully", 'diff': diff_count})
+        return Response({"message": "diff_Count updated successfully", "diff": diff_count})
 
     @action(detail=True, methods=['get'])
     def create_book_cover(self, request, pk=None):
@@ -225,7 +251,7 @@ class DraftViewSet(viewsets.ModelViewSet):
 class IntroViewSet(viewsets.ModelViewSet):
     queryset = Intro.objects.all()
     serializer_class = IntroSerializer
-
+    
     @action(detail=False, methods=['post'])
     def generate_subject(self, request):
         nickname = request.data.get('nickname')
@@ -493,7 +519,10 @@ class IntroViewSet(viewsets.ModelViewSet):
             # IntroContent 업데이트
             latest_intro.IntroContent += "/n" + completion.choices[0].message.content + "/n"
             latest_intro.save()
-            return Response({'message': 'IntroContent updated successfully'}, status=status.HTTP_201_CREATED)
+            return Response({
+                'message': 'IntroContent updated successfully.',
+                '만들어진 이야기': completion.choices[0].message.content
+            }, status=status.HTTP_201_CREATED)
         else:
             return Response({'error': 'No intro instance found for the member'}, status=status.HTTP_404_NOT_FOUND)
 
@@ -541,7 +570,10 @@ class IntroViewSet(viewsets.ModelViewSet):
             # IntroContent 업데이트
             latest_intro.IntroContent += "/n" + completion.choices[0].message.content
             latest_intro.save()
-            return Response({'message': 'IntroContent updated successfully'}, status=status.HTTP_201_CREATED)
+            return Response({
+                'message': 'IntroContent updated successfully.',
+                '만들어진 이야기': completion.choices[0].message.content
+            }, status=status.HTTP_201_CREATED)
         else:
             return Response({'error': 'No intro instance found for the member'}, status=status.HTTP_404_NOT_FOUND)
 
@@ -598,6 +630,20 @@ class IntroViewSet(viewsets.ModelViewSet):
             "message": "동화 이야기가 생성되어 저장되었습니다.",
             "동화이야기": {f"page_{i+1}": content for i, content in enumerate(bookstory_pages)}
         }, status=status.HTTP_201_CREATED)
+
+
+        subject_id = request.data.get("subject_id")
+        subject = get_object_or_404(Intro, id=subject_id)
+        return Response(
+            {
+                "message": "subject selected successfully",
+                "selected_subject": {
+                    "id": subject.id,
+                    "subject": subject.subject,
+                    "draft_id": draft.id,
+                },
+            }
+        )
 
 
 class DraftPageViewSet(viewsets.ModelViewSet):
@@ -984,9 +1030,3 @@ class MyFlowerViewSet(viewsets.ModelViewSet):
     queryset = MyFlower.objects.all()
     serializer_class = MyFlowerSerializer
 
-
-"""class TitleImageViewSet(viewsets.ModelViewSet):
-    queryset = TitleImage.objects.all()
-    serializer_class = TitleImageSerializer
-# Create your views here.
-"""

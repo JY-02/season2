@@ -6,24 +6,27 @@ class Members(models.Model):
     nickname = models.CharField(max_length=50)
     email = models.EmailField(max_length=40)
     password = models.CharField(max_length=100)
-    profImg = models.URLField(max_length=512)
+    profImg = models.URLField(max_length=512, default="https://i.pinimg.com/564x/f3/d1/ed/f3d1edf10d63c40e1fa06364176fa502.jpg")
     seedCnt = models.IntegerField(default=10)
     createDate = models.DateTimeField(auto_now_add=True)
     createCnt = models.IntegerField(default=0)
 
     class Meta:
-        db_table = 'member'
+        db_table = "member"
 
 
 class Books(models.Model):
     bookName = models.CharField(max_length=50)
     bCreateDate = models.DateTimeField(auto_now_add=True)
     coverImg = models.URLField(max_length=512)
+
+
     #줄거리내용추가필요? 시놉시스 char?
     #evalStart = models.IntegerField(default=0)
     #lastPage = models.IntegerField()
+
     class Meta:
-        db_table = 'book'
+        db_table = "book"
 
 
 class MyLibrary(models.Model):
@@ -31,7 +34,7 @@ class MyLibrary(models.Model):
     user = models.ForeignKey(Members, on_delete=models.CASCADE)
 
     class Meta:
-        db_table = 'mylibrary'
+        db_table = "mylibrary"
 
 
 class Draft(models.Model):
@@ -42,7 +45,8 @@ class Draft(models.Model):
     genre = models.CharField(max_length=30, null=True)
 
     class Meta:
-        db_table = 'draft'
+        db_table = "draft"
+
 
 
 class Intro(models.Model):
@@ -53,7 +57,7 @@ class Intro(models.Model):
     IntroContent = models.TextField(null=True)
 
     class Meta:
-        db_table = 'intro'
+        db_table = "intro"
 
 
 class DraftPage(models.Model):
@@ -64,7 +68,7 @@ class DraftPage(models.Model):
     pageImage = models.URLField(max_length=512, null=True)
 
     class Meta:
-        db_table = 'draftpage'
+        db_table = "draftpage"
 
 
 class FeedBack(models.Model):
@@ -74,7 +78,7 @@ class FeedBack(models.Model):
     feedContent = models.TextField()
 
     class Meta:
-        db_table = 'feedback'
+        db_table = "feedback"
 
 
 class Followers(models.Model):
@@ -83,24 +87,24 @@ class Followers(models.Model):
     follower = models.IntegerField(default=0) # 구독자 수
 
     class Meta:
-        db_table = 'follower'
+        db_table = "follower"
 
 
 class Flower(models.Model):
-    #achieveCnt = models.IntegerField()
-    #flowerImg = models.URLField(max_length=512)
     flowerName = models.CharField(max_length=50) # id - 1: 소중한 꽃 피우기, 2 : 나를 표현하기, 3 : 당신은 출석왕, 4 : 당신은 독서왕, 5 : 알콩이와 친해지기, 6 : 달콩이와 친해지기, 7 : 당신은 인싸, 8 : 당신은 훌륭한 작가
 
+
     class Meta:
-        db_table = 'flower'
+        db_table = "flower"
 
 
 class MyForest(models.Model):
     user = models.ForeignKey(Members, on_delete=models.CASCADE)
+
     #flower = models.ForeignKey(Flower, on_delete=models.CASCADE)
 
     class Meta:
-        db_table = 'myforest'
+        db_table = "myforest"
 
 
 class MyFlower(models.Model):
