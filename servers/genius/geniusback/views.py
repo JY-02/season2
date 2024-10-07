@@ -10,9 +10,9 @@ from django.shortcuts import get_object_or_404
 from geniusback.models import *
 from .serializers import createSerializer
 from openai import OpenAI
-import os
+import os, random
 
-from .utils import generate, generate_image
+from .utils import generate,generate_image
 import logging
 
 MembersSerializer = createSerializer(Members)
@@ -228,21 +228,47 @@ class IntroViewSet(viewsets.ModelViewSet):
 
     @action(detail=False, methods=['post'])
     def generate_subject(self, request):
+        nickname = request.data.get('nickname')
         genre = request.data.get('genre')
-        user_id = request.data.get('user_id')
-        member = get_object_or_404(Members, id=user_id)
+        # 닉네임으로 멤버 조회
+        member = get_object_or_404(Members, nickname=nickname)
+
         if not genre:
             return Response({'error': 'Genre is required'}, status=status.HTTP_400_BAD_REQUEST)
-        subject_prompt = f"장르 {genre}에 기반한 독특한 이야기 주제를 3개만 생성해."
+        images = TitleImage.objects.filter(img_genre=genre)
+        new_draft = Draft.objects.create(user=member)
+
+        try:
+            random_images = random.sample(list(images), 3)
+
+            result = [
+                {"image_url": img.title_image_url, "name": img.name, "title_image_id": img.id,
+                 "draft_id":new_draft.id} for img in random_images
+            ]
+            return Response(result, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+    """@action(detail=False, methods=['post'])
+    def generate_subject_imshi(self, request):
+        nickname = request.data.get('nickname')
+        genre = request.data.get('genre')
+        # 닉네임으로 멤버 조회
+        member = get_object_or_404(Members, nickname=nickname)
+
+        if not genre:
+            return Response({'error': 'Genre is required'}, status=status.HTTP_400_BAD_REQUEST)
+        subject_prompt = f"장르 {genre}에 기반한 독특한 이야기 주제를 10글자 이내로 3개씩 생성해."
         new_draft = Draft.objects.create(user=member)
         try:
             responses = generate(subject_prompt)
             if isinstance(responses, str):
                 images = []
                 subjects = responses.split('\n')
-                for response in subjects:
-                    if response.strip():
-                        image_url = generate_image(response)
+                for responses in subjects:
+                    if responses.strip():
+                        image_url = generate_image(responses.strip())
                         images.append(image_url)
                 return Response({'topics': subjects, 'images': images, 'draft_id': new_draft.id})
             else:
@@ -250,6 +276,7 @@ class IntroViewSet(viewsets.ModelViewSet):
                                 status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+"""
 
     @action(detail=False, methods=['post'])
     def create_intro_content(self, request):
@@ -302,7 +329,8 @@ class IntroViewSet(viewsets.ModelViewSet):
             if isinstance(response, str):
                 protagonist_names = response.split('\n')
             else:
-                return Response({'error': 'Invali   d response format'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+                return Response({'error': 'Invalid response format'},
+                                status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
@@ -955,4 +983,10 @@ class MyForestViewSet(viewsets.ModelViewSet):
 class MyFlowerViewSet(viewsets.ModelViewSet):
     queryset = MyFlower.objects.all()
     serializer_class = MyFlowerSerializer
+
+
+"""class TitleImageViewSet(viewsets.ModelViewSet):
+    queryset = TitleImage.objects.all()
+    serializer_class = TitleImageSerializer
 # Create your views here.
+"""

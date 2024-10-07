@@ -6,5 +6,3 @@ app = apps.get_app_config('geniusback')
 
 for model_name, model in app.models.items():
     admin.site.register(model)
-
-# Register your models here.

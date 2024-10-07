@@ -1,7 +1,5 @@
 from django.db import models
 
-
-# Create your models here.
 class Members(models.Model):
     nickname = models.CharField(max_length=50)
     email = models.EmailField(max_length=40)
@@ -19,9 +17,10 @@ class Books(models.Model):
     bookName = models.CharField(max_length=50)
     bCreateDate = models.DateTimeField(auto_now_add=True)
     coverImg = models.URLField(max_length=512)
-    #줄거리내용추가필요? 시놉시스 char?
-    #evalStart = models.IntegerField(default=0)
-    #lastPage = models.IntegerField()
+    copyR = models.CharField(max_length=30)
+    evalStart = models.IntegerField(default=0)
+    lastPage = models.IntegerField()
+
     class Meta:
         db_table = 'book'
 
@@ -37,9 +36,8 @@ class MyLibrary(models.Model):
 class Draft(models.Model):
     user = models.ForeignKey(Members, on_delete=models.CASCADE)
     savedAt = models.DateTimeField(auto_now_add=True)
+    drawSty = models.IntegerField(default=0)
     diff = models.IntegerField(default=0)
-    writer = models.CharField(max_length=30, null=True)
-    genre = models.CharField(max_length=30, null=True)
 
     class Meta:
         db_table = 'draft'
@@ -48,9 +46,9 @@ class Draft(models.Model):
 class Intro(models.Model):
     draft = models.ForeignKey(Draft, on_delete=models.CASCADE)
     user = models.ForeignKey(Members, on_delete=models.CASCADE)
-    introMode = models.BooleanField() # 0 : 알콩이(선택형), 1 : 달콩이(작성형)
+    introMode = models.BooleanField()
     subject = models.CharField(max_length=100)
-    IntroContent = models.TextField(null=True)
+    IntroContent = models.TextField()
 
     class Meta:
         db_table = 'intro'
@@ -61,7 +59,6 @@ class DraftPage(models.Model):
     user = models.ForeignKey(Members, on_delete=models.CASCADE)
     pageNum = models.IntegerField()
     pageContent = models.TextField()
-    pageImage = models.URLField(max_length=512, null=True)
 
     class Meta:
         db_table = 'draftpage'
@@ -79,17 +76,16 @@ class FeedBack(models.Model):
 
 class Followers(models.Model):
     user = models.ForeignKey(Members, on_delete=models.CASCADE)
-    following = models.IntegerField(default=0) # 내가 버튼 누른거(내가 구독한 사람 수)
-    follower = models.IntegerField(default=0) # 구독자 수
+    followImg = models.URLField(max_length=512)
 
     class Meta:
         db_table = 'follower'
 
 
 class Flower(models.Model):
-    #achieveCnt = models.IntegerField()
-    #flowerImg = models.URLField(max_length=512)
-    flowerName = models.CharField(max_length=50) # id - 1: 소중한 꽃 피우기, 2 : 나를 표현하기, 3 : 당신은 출석왕, 4 : 당신은 독서왕, 5 : 알콩이와 친해지기, 6 : 달콩이와 친해지기, 7 : 당신은 인싸, 8 : 당신은 훌륭한 작가
+    flowerName = models.CharField(max_length=50)
+    achieveCnt = models.IntegerField()
+    flowerImg = models.URLField(max_length=512)
 
     class Meta:
         db_table = 'flower'
@@ -97,7 +93,7 @@ class Flower(models.Model):
 
 class MyForest(models.Model):
     user = models.ForeignKey(Members, on_delete=models.CASCADE)
-    #flower = models.ForeignKey(Flower, on_delete=models.CASCADE)
+    flower = models.ForeignKey(Flower, on_delete=models.CASCADE)
 
     class Meta:
         db_table = 'myforest'
@@ -111,11 +107,3 @@ class MyFlower(models.Model):
 
     class Meta:
         db_table = 'myflower'
-
-class TitleImage(models.Model):
-    name = models.CharField(max_length=256)
-    img_genre = models.CharField(max_length=256)
-    title_image_url = models.URLField(max_length=1024)
-
-    class Meta:
-        db_table = 'titleimage'
