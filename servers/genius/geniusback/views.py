@@ -7,6 +7,7 @@ from rest_framework.decorators import action
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.views import APIView
+
 from .models import (
     Books,
     Draft,
@@ -146,18 +147,16 @@ class MyLibraryViewSet(viewsets.ModelViewSet):
 class DraftViewSet(viewsets.ModelViewSet):
     queryset = Draft.objects.all()
     serializer_class = DraftSerializer
-    @action(detail=True, methods=['post'])
-    def choose_diff(self, request, pk=None):
-        draft = self.get_object()
-
-    @action(methods=["post"], detail=True)
+    @action(detail=False, methods=["post"])
     def choose_diff(self, request: Request):
+        nickname = request.data.get('nickname')
+        diff_count = request.data.get("diff_Count")
+
+        member = get_object_or_404(Members, nickname=nickname)
+        draft = Draft.objects.filter(user=member).order_by('-savedAt').first()
         if not isinstance(request.data, dict):
             return Response({"error": "No data received"}, status=status.HTTP_400_BAD_REQUEST)
 
-        draft = self.get_object()
-
-        diff_count = request.data.get("diff_Count")
         if diff_count is None:
             return Response({'error': 'diff_Count is required.'}, status=status.HTTP_400_BAD_REQUEST)
         try:
@@ -173,10 +172,14 @@ class DraftViewSet(viewsets.ModelViewSet):
 
         return Response({"message": "diff_Count updated successfully", "diff": diff_count})
 
-    @action(detail=True, methods=['get'])
-    def create_book_cover(self, request, pk=None):
-        draft = self.get_object()
-        pages = DraftPage.objects.filter(draft=draft).order_by('pageNum')
+
+    @action(detail=False, methods=['get'])
+    def create_book_cover(self, request):
+        nickname = request.data.get('nickname')
+
+        member = get_object_or_404(Members, nickname=nickname)
+        draft = Draft.objects.filter(user=member).order_by('-savedAt').first
+        pages = DraftPage.objects.filter(user=member).order_by('pageNum')
         full_text = ' '.join(page.pageContent for page in pages)
         try:
             image_url = generate_image(full_text)
@@ -185,10 +188,14 @@ class DraftViewSet(viewsets.ModelViewSet):
 
         return Response({'draft_id': draft.id, 'image_url': image_url})
 
-    @action(detail=True, methods=['get'])
-    def get_page_content(self, request, pk=None):
-        draft = self.get_object()
-        draft_pages = DraftPage.objects.filter(draft=draft).order_by('pageNum')
+
+    @action(detail=False, methods=['get'])
+    def get_page_content(self, request):
+        nickname = request.data.get('nickname')
+
+        member = get_object_or_404(Members, nickname=nickname)
+        draft = Draft.objects.filter(user=member).order_by('-savedAt').first()
+        draft_pages = DraftPage.objects.filter(user=member).order_by('pageNum')
         contents = [page.pageContent for page in draft_pages]
 
         return Response({
@@ -251,7 +258,6 @@ class DraftViewSet(viewsets.ModelViewSet):
 class IntroViewSet(viewsets.ModelViewSet):
     queryset = Intro.objects.all()
     serializer_class = IntroSerializer
-    
     @action(detail=False, methods=['post'])
     def generate_subject(self, request):
         nickname = request.data.get('nickname')
@@ -306,16 +312,49 @@ class IntroViewSet(viewsets.ModelViewSet):
 
     @action(detail=False, methods=['post'])
     def create_intro_content(self, request):
-        draft_id = request.data.get('draft_id')
-        user_id = request.data.get('user_id')
-        diff = int(request.data.get('diff'))
-        intro_mode = request.data.get('introMode')
+        nickname = request.data.get('nickname')
         selected_subject = request.data.get('selected_subject')
-        if not draft_id:
-            return Response({'error': 'Draft ID is required'}, status=status.HTTP_400_BAD_REQUEST)
-        if not user_id:
-            return Response({'error': 'User ID is required'}, status=status.HTTP_400_BAD_REQUEST)
-        draft = get_object_or_404(Draft, pk=draft_id)
+
+        member = get_object_or_404(Members, nickname=nickname)
+        draft = Draft.objects.filter(user=member).order_by('-savedAt').first()
+        if not draft:
+            return Response({"error": "Draft is required"}, status=status.HTTP_404_NOT_FOUND)
+
+        diff = draft.diff
+        name_prompt = f"주제 {selected_subject}를 기반해서 주인공의 이름 {diff}개만 생성해."
+
+        try:
+            response = generate(name_prompt)
+            if isinstance(response, str):
+                protagonist_names = response.split('\n')
+            else:
+                return Response({'error': 'Invalid response format'},
+                                status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+        intro = Intro(draft=draft, user_id=member.id, introMode=0,
+                    subject=selected_subject)
+        intro.save()
+        return Response({'intro_id': intro.id, 'subject': selected_subject,
+                        'intro_content': protagonist_names, 'draft_id': draft.id})
+
+    @action(detail=False, methods=['post'])
+    def recreate_intro_content(self, request):
+        nickname = request.data.get('nickname')
+        selected_subject = request.data.get('selected_subject')
+
+        member = get_object_or_404(Members, nickname=nickname)
+        draft = Draft.objects.filter(user=member).order_by('-savedAt').first()
+        if not draft:
+            return Response({"error": "Draft is required"}, status=status.HTTP_404_NOT_FOUND)
+
+        diff = draft.diff
+        data = Intro.objects.order_by('-savedAt').first()
+        if data:
+            data.delete()
+
         name_prompt = f"주제 {selected_subject}를 기반해서 주인공의 이름 {diff}개만 생성해."
         try:
             response = generate(name_prompt)
@@ -328,44 +367,27 @@ class IntroViewSet(viewsets.ModelViewSet):
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-        intro = Intro(draft=draft, user_id=user_id, introMode=intro_mode,
-                    subject=selected_subject, IntroContent=protagonist_names)
+        intro = Intro(draft=draft, user_id=member.id, introMode=0,
+                    subject=selected_subject)
         intro.save()
         return Response({'intro_id': intro.id, 'subject': selected_subject,
                         'intro_content': protagonist_names})
 
     @action(detail=False, methods=['post'])
-    def recreate_intro_content(self, request):
-        draft_id = request.data.get('draft_id')
-        user_id = request.data.get('user_id')
-        diff = int(request.data.get('diff'))
-        intro_mode = request.data.get('introMode')
-        selected_subject = request.data.get('selected_subject')
-        if not draft_id:
-            return Response({'error': 'Draft ID is required'}, status=status.HTTP_400_BAD_REQUEST)
-        if not user_id:
-            return Response({'error': 'User ID is required'}, status=status.HTTP_400_BAD_REQUEST)
-        draft = get_object_or_404(Draft, pk=draft_id)
-        data = Intro.objects.all()
-        data.delete()
+    def save_intro_contents(self, request):
+        nickname = request.data.get('nickname')
+        selected_content = request.data.get('selected_content')
 
-        name_prompt = f"주제 {selected_subject}를 기반해서 주인공의 이름 {diff}개만 생성해."
-        try:
-            response = generate(name_prompt)
-            if isinstance(response, str):
-                protagonist_names = response.split('\n')
-            else:
-                return Response({'error': 'Invalid response format'},
-                                status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        member = get_object_or_404(Members, nickname=nickname)
+        intro = Intro.objects.filter(user=member).order_by('-id').first()
 
-        except Exception as e:
-            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-        intro = Intro(draft=draft, user_id=user_id, introMode=intro_mode,
-                    subject=selected_subject, IntroContent=protagonist_names)
+        intro.IntroContent = selected_content
         intro.save()
-        return Response({'intro_id': intro.id, 'subject': selected_subject,
-                        'intro_content': protagonist_names})
+
+        return Response({"message": "intro_content updated successfully", "intro_content": intro.IntroContent})
+
+
+
 
     name = ''
     gender = ''
@@ -652,16 +674,17 @@ class DraftPageViewSet(viewsets.ModelViewSet):
 
     @action(detail=False, methods=['post'])
     def make_draft_page(self, request):
-        draft_id = request.data.get('draft_id')
-        user_id = request.data.get('user_id')
-        diff = int(request.data.get('diff'))
-        draft = get_object_or_404(Draft, pk=draft_id)
-        selected_subject = request.data.get('selected_subject')
-        intro_content = request.data.get('intro_content')
-        if not draft_id:
-            return Response({'error': 'Draft ID is required'}, status=status.HTTP_400_BAD_REQUEST)
-        if not user_id:
-            return Response({'error': 'User ID is required'}, status=status.HTTP_400_BAD_REQUEST)
+        nickname = request.data.get('nickname')
+
+        member = get_object_or_404(Members, nickname=nickname)
+        draft = Draft.objects.filter(user=member).order_by('-savedAt').first()
+        intro = Intro.objects.filter(user=member, draft=draft).order_by('-id').first()
+        diff = draft.diff
+        intro_content = intro.IntroContent
+        selected_subject = intro.subject
+
+        if not draft:
+            return Response({"error": "Draft is required"}, status=status.HTTP_404_NOT_FOUND)
         latest_page = DraftPage.objects.filter(draft=draft).order_by('-pageNum').first()
         if latest_page:
             total_pages = latest_page.pageNum + 1
@@ -682,7 +705,7 @@ class DraftPageViewSet(viewsets.ModelViewSet):
             except Exception as e:
                 return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-            new_page = DraftPage.objects.create(draft=draft, user_id=user_id, pageNum=total_pages)
+            new_page = DraftPage.objects.create(draft=draft, user_id=member.id, pageNum=total_pages)
 
             return Response({
                 'question': intro_content+"는 어떤 성격이야?",
@@ -706,7 +729,7 @@ class DraftPageViewSet(viewsets.ModelViewSet):
             except Exception as e:
                 return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-            new_page = DraftPage.objects.create(draft=draft, user_id=user_id, pageNum=total_pages
+            new_page = DraftPage.objects.create(draft=draft, user_id=member.id, pageNum=total_pages
                                                 )
 
             return Response({
@@ -720,7 +743,7 @@ class DraftPageViewSet(viewsets.ModelViewSet):
             context = ' '.join(
                 [page.pageContent for page in DraftPage.objects.filter(draft=draft).order_by('pageNum')])
             first_question_prompt = (f"지금까지의 줄거리야 : {context}. 이를 기반으로, "
-                                     f"이야기를 전개시키기 위해 이야기와 관련된 질문을 한가지만 해.")
+                                     f"이야기를 이어나가기 위해 이야기와 관련된 질문을 한가지만 해. 아직 이야기를 끝내면 안돼.")
 
             try:
                 response = generate(first_question_prompt)
@@ -744,7 +767,7 @@ class DraftPageViewSet(viewsets.ModelViewSet):
             except Exception as e:
                 return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-            new_page = DraftPage.objects.create(draft=draft, user_id=user_id,
+            new_page = DraftPage.objects.create(draft=draft, user_id=member.id,
                                                 pageNum=total_pages)
 
             return Response({
@@ -757,16 +780,16 @@ class DraftPageViewSet(viewsets.ModelViewSet):
             Response({'error' : 'Invalid page number'}, status=status.HTTP_400_BAD_REQUEST)
     @action(detail=False, methods=['post'])
     def finish_draft_page(self, request):
-        draft_id = request.data.get('draft_id')
-        user_id = request.data.get('user_id')
-        diff = int(request.data.get('diff'))
-        draft = get_object_or_404(Draft, pk=draft_id)
+        nickname = request.data.get('nickname')
+
+        member = get_object_or_404(Members, nickname=nickname)
+        draft = Draft.objects.filter(user=member).order_by('-savedAt').first()
+        diff = draft.diff
+
         latest_page = DraftPage.objects.filter(draft=draft).order_by('-pageNum').first()
         total_pages = latest_page.pageNum + 1
-        if not draft_id:
-            return Response({'error': 'Draft ID is required'}, status=status.HTTP_400_BAD_REQUEST)
-        if not user_id:
-            return Response({'error': 'User ID is required'}, status=status.HTTP_400_BAD_REQUEST)
+        if not draft:
+            return Response({"error": "Draft is required"}, status=status.HTTP_404_NOT_FOUND)
 
         context = ' '.join(
             [page.pageContent for page in DraftPage.objects.filter(draft=draft).order_by('pageNum')])
@@ -797,7 +820,7 @@ class DraftPageViewSet(viewsets.ModelViewSet):
             except Exception as e:
                 return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-            new_page = DraftPage.objects.create(draft=draft, user_id=user_id,
+            new_page = DraftPage.objects.create(draft=draft, user_id=member.id,
                                                 pageNum=total_pages)
 
             return Response({
@@ -810,7 +833,7 @@ class DraftPageViewSet(viewsets.ModelViewSet):
         if total_pages == 9:
             final_question_prompt = (f"지금까지의 줄거리야 : {context}."
                                      f"이야기를 끝내기 위한 질문을 한가지만 해."
-                                     f"이 질문 이후로 동화는 끝나므로, 신중하게 답변해.")
+                                     f"이 질문 이후로 동화는 끝나므로, 신중하게 질문해.")
             try:
                 response = generate(final_question_prompt)
                 if isinstance(response, str):
@@ -824,7 +847,7 @@ class DraftPageViewSet(viewsets.ModelViewSet):
             final_answer_prompt = (f"지금까지의 줄거리 {context}와 "
                                    f"동화를 끝내기 위한 질문 {final_question}을 보고, "
                                    f"그 질문에 부합하면서 창의적인 답변 {diff}개를 단답형으로 생성해."
-                                   f"이 선택지 이후로 동화는 끝나므로, 신중하게 답변해.")
+                                   f"이 선택지 이후로 동화는 끝나므로, 신중하게 질문해.")
             try:
                 response = generate(final_answer_prompt)
                 if isinstance(response, str):
@@ -835,7 +858,7 @@ class DraftPageViewSet(viewsets.ModelViewSet):
             except Exception as e:
                 return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-            new_page = DraftPage.objects.create(draft=draft, user_id=user_id,
+            new_page = DraftPage.objects.create(draft=draft, user_id=member.id,
                                                 pageNum=total_pages)
 
             return Response({
@@ -847,20 +870,28 @@ class DraftPageViewSet(viewsets.ModelViewSet):
 
     @action(detail=False, methods=['post'])
     def save_selected_answer(self, request):
-        draftpage_id = request.data.get('draftpage_id')
+        nickname = request.data.get('nickname')
         question = request.data.get('question')
         selected_answer = request.data.get('selected_answer')
 
-        if not draftpage_id:
-            return Response({'error': 'Page ID is required'}, status=status.HTTP_400_BAD_REQUEST)
+        member = get_object_or_404(Members, nickname=nickname)
+        draft_page = DraftPage.objects.filter(user=member).order_by('-pageNum').first()
+        total_pages = draft_page.pageNum + 1
+
         if not selected_answer:
             return Response({'error': 'Selected answer is required'}, status=status.HTTP_400_BAD_REQUEST)
 
-        draft_page = get_object_or_404(DraftPage, pk=draftpage_id)
-        unite_prompt = f"질문 {question}과 답변 {selected_answer}를 기반으로 한 페이지 분량의 동화 내용 일부를 완성해."
+        unite_prompt = f"질문 {question}과 답변 {selected_answer}를 기반으로 한 페이지 분량의 동화 내용 일부를 완성해. 또, 아직은 동화를 끝내면 안돼."
+        final_prompt = f"질문 {question}과 답변 {selected_answer}를 기반으로 동화의 끝은 아니지만, 후반부를 위한 한 페이지 분량의 동화 내용 일부를 완성해."
+        finish_prompt = f"질문 {question}과 답변 {selected_answer}를 기반으로 동화의 마지막을 장식할 한 페이지 분량의 동화 내용 일부를 완성해."
 
         try:
-            response = generate(unite_prompt)
+            if 7 > total_pages:
+                response = generate(unite_prompt)
+            if 9 > total_pages > 6:
+                response = generate(final_prompt)
+            if total_pages == 9:
+                response = generate(finish_prompt)
             if isinstance(response, str):
                 new_page = response.split('\n')
             else:
@@ -876,11 +907,12 @@ class DraftPageViewSet(viewsets.ModelViewSet):
 
     @action(detail=False, methods=['post'])
     def create_content_image(self, request):
-        page_id = request.data.get('page_id')
-        if not page_id:
-            return Response({'error': 'Page ID is required'}, status=status.HTTP_400_BAD_REQUEST)
+        nickname = request.data.get('nickname')
+        page_num = request.data.get('page_num')
 
-        draft_page = get_object_or_404(DraftPage, pk=page_id)
+        member = get_object_or_404(Members, nickname=nickname)
+        draft_page = DraftPage.objects.filter(user=member, pageNum=page_num).first()
+
         image_prompt = f"이야기 내용: '{draft_page.pageContent}'. 이 내용을 바탕으로 상상력을 자극하는 이미지를 생성해."
 
         try:
@@ -895,11 +927,11 @@ class DraftPageViewSet(viewsets.ModelViewSet):
 
     @action(detail=False, methods=['post'])
     def recreate_content_image(self, request):
-        page_id = request.data.get('page_id')
-        if not page_id:
-            return Response({'error': 'Page ID is required'}, status=status.HTTP_400_BAD_REQUEST)
+        nickname = request.data.get('nickname')
+        page_num = request.data.get('page_num')
 
-        draft_page = get_object_or_404(DraftPage, pk=page_id)
+        member = get_object_or_404(Members, nickname=nickname)
+        draft_page = DraftPage.objects.filter(user=member, pageNum=page_num).order_by('-pageNum').first()
 
         if draft_page.pageImage:
             draft_page.pageImage = None
@@ -1029,4 +1061,3 @@ class MyForestViewSet(viewsets.ModelViewSet):
 class MyFlowerViewSet(viewsets.ModelViewSet):
     queryset = MyFlower.objects.all()
     serializer_class = MyFlowerSerializer
-
